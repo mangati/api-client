@@ -19,30 +19,29 @@ class Request
      */
     public function do(string $method, string $url, array $data = [], array $headers = []): ?array
     {
-        $method    = strtoupper($method);
+        $method = strtoupper($method);
+
+        if ($method === 'GET' && count($data)) {
+            $url .= '?' . http_build_query($data);
+        }
+
         $ch        = curl_init($url);
         $headers[] = 'Content-Type: application/json';
 
         //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        switch ($method) {
-            case 'POST':
-            case 'PUT':
-                $content = json_encode($data);
-                if ($method === 'POST') {
-                    curl_setopt($ch, CURLOPT_POST, true);
-                } else {
-                    curl_setopt($ch, CURLOPT_PUT, true);
-                }
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
-                $headers[] = 'Content-Length: ' . strlen($content);
-                break;
-            case 'DELETE':
-            case 'PUT':
+        if ($method !== 'GET') {
+            $content = json_encode($data);
+            if ($method === 'POST') {
+                curl_setopt($ch, CURLOPT_POST, true);
+            } else if ($method === 'PUT') {
+                curl_setopt($ch, CURLOPT_PUT, true);
+            } else {
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-                break;
+            }
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
+            $headers[] = 'Content-Length: ' . strlen($content);
         }
 
         $json     = null;

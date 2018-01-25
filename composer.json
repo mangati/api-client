@@ -1,6 +1,6 @@
 {
     "name": "mangati/api-client",
-    "description": "Generic JSON API client written in PHP",
+    "description": "Generic JSON restful API client written in PHP.",
     "type": "library",
     "license": "MIT",
     "authors": [
