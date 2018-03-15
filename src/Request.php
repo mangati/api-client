@@ -35,8 +35,6 @@ class Request
             $content = json_encode($data);
             if ($method === 'POST') {
                 curl_setopt($ch, CURLOPT_POST, true);
-            } else if ($method === 'PUT') {
-                curl_setopt($ch, CURLOPT_PUT, true);
             } else {
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             }
