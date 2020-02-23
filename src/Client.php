@@ -52,7 +52,7 @@ class Client
     }
 
     /**
-     * @return Session
+     * @return Path
      */
     public function createPath($path)
     {
